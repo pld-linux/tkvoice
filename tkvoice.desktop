@@ -7,5 +7,4 @@ Icon=tkvoice.png
 Exec=tkvoice
 Terminal=0
 Type=Application
-
 # vi: encoding=utf-8
