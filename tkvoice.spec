@@ -1,5 +1,5 @@
 Summary:	Frontend for vgetty and sendfax
-Summary(pl):	Frontend dla vgetty i sendfax
+Summary(pl):	Frontend do programów vgetty i sendfax
 Name:		tkvoice
 Version:	1.4b
 Release:	1
@@ -17,10 +17,10 @@ BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-Frontend for vgetty and sendfax for X
+Frontend for vgetty and sendfax for X.
 
 %description -l pl
-Frontend dla vgetty i sendfax dla X
+Frontend dla X do programów vgetty i sendfax.
 
 %prep
 %setup -q
