@@ -6,6 +6,7 @@ Release:	1
 License:	GPL
 Group:		Applications/Communications
 Source0:	http://tkvoice.netfirms.com/%{name}-%{version}.tar.gz
+# Source0-md5:	5299f77cda2112b6cdb09567c10ee0bc
 Source1:	%{name}.desktop
 Source2:	%{name}.png
 Patch0:		%{name}-install.patch
