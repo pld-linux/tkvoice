@@ -1,0 +1,111 @@
+--- tkvoice-1.4b/tkvoice.fix	Sat Apr  5 14:12:17 2003
++++ tkvoice-1.4b/tkvoice	Mon Apr  7 01:31:54 2003
+@@ -53,8 +53,8 @@
+ global drawvoice tkvoicedir userhome LSLFT
+ global voicecfg voicedir voicein voiceout greeting vindex vflag
+   set USERPREF ""
+-  set STARTDIR [pwd]
+-  set tkvoicedir $STARTDIR
++  set STARTDIR /usr/share/tkvoice
++  set tkvoicedir /usr/share/tkvoice
+   set FILENAME tkvoicevoice.dat
+   cd ~/
+   if { [file isdirectory .tkvoice] == 0} {
+@@ -67,7 +67,7 @@
+        append USERPREF $string
+       }
+     close $file } else {
+-   set USERPREF "1 $tkvoicedir /usr/local/etc/mgetty+sendfax"
++   set USERPREF "1 $tkvoicedir /etc/mgetty+sendfax"
+   }
+    set drawvoice  [lindex $USERPREF 0]
+    set tkvoicedir [lindex $USERPREF 1]
+@@ -195,7 +195,7 @@
+ # tkvoice directory checking START
+ #
+ # TEST for executable:
+-   if { [file executable $tkvoicedir/tkvoice] == 0} {
++   if { [file executable /usr/bin/tkvoice] == 0} {
+          set tkvoicedir $STARTDIR
+          if { [file executable $tkvoicedir/tkvoice] == 1} {
+             savevoice
+@@ -308,7 +308,7 @@
+        catch [exec mkdir .tkvoice] }
+   cd ~/.tkvoice
+   if { [file isfile $SAVENAME] == 1} {
+-       catch [exec rm $SAVENAME] }
++#       catch [exec rm $SAVENAME] }
+   catch [exec touch $SAVENAME]
+   set file [open "$SAVENAME" r+]
+   foreach x "$drawvoice $tkvoicedir $voicecfg" {
+@@ -390,7 +390,7 @@
+     exec cat $MESSAGE | rmdtopvf | pvfamp -A $PBAMP | pvftowav > \
+          $userhome/tkvoice.tmp 2>/dev/null
+     if {$PCMDT == "wavplay"} {
+-      set playcmd "$tkvoicedir/bin/wavplay -M -d /dev/$audioDEV"
++      set playcmd "wavplay -M -d /dev/$audioDEV"
+       set playPID [eval exec $playcmd $userhome/tkvoice.tmp > /dev/null 2>&1 &]
+     } elseif {$PCMDT == "sox"} {
+     set playPID [eval exec sox -t wav $userhome/tkvoice.tmp -t $audioOST /dev/$audioDEV > /dev/null 2>&1 &]
+@@ -464,7 +464,7 @@
+ proc listen_g {} {
+ global playwave tkvoicedir voicedir voiceout greeting PCMDT audioOST audioDEV
+ if {$PCMDT == "wavplay"} {
+-    set playcmd "$tkvoicedir/bin/wavplay -d /dev/$audioDEV"
++    set playcmd "wavplay -d /dev/$audioDEV"
+     catch [eval exec $playcmd $voicedir/$voiceout/$greeting.wav ]
+      } elseif {$PCMDT == "sox"} {
+     catch [eval exec sox -t wav $voicedir/$voiceout/$greeting.wav -t $audioOST /dev/$audioDEV > /dev/null 2>&1 &]
+@@ -618,8 +618,8 @@
+     exec rm $n
+     } else {
+     if {$LSLFT == "coreutils"} {
+-       set f [exec ls -l --full-time --time-style=+%a\ %b\ %d\ %I:%M:%S\ %Y $n \
+-                   | awk {{print $6, $7, $8, $9, $10}}]
++       set f [exec ls -l --full-time --time-style=+%I:%M:%S\ %x $n \
++                   | awk {{print $6, $7}}]
+     } else {
+         set f [exec ls -l --full-time $n | awk {{print $6, $7, $8, $9, $10}}]
+     }
+@@ -662,8 +662,8 @@
+     if {[string range $test 0 $vdlength] == $faxdir} {
+  foreach n $test {
+     if {$LSLFT == "coreutils"} {
+-       set f [exec ls -l --full-time --time-style=+%a\ %b\ %d\ %I:%M:%S\ %Y $n \
+-                   | awk {{print $6, $7, $8, $9, $10}}]
++       set f [exec ls -l --full-time --time-style=+%I:%M:%S\ %x $n \
++                   | awk {{print $6, $7}}]
+     } else {
+         set f [exec ls -l --full-time $n | awk {{print $6, $7, $8, $9, $10}}]
+     }
+@@ -728,8 +728,8 @@
+ # I had to use the GNU extension %s in conjuction with ls --full-time
+ # as ls --full-time catches modification time
+     if {$LSLFT == "coreutils"} {
+-    set f [exec ls -l --full-time --time-style=+%a\ %b\ %d\ %I:%M:%S\ %Y $test \
+-                | awk {{print $6, $7, $8, $9, $10}}]
++    set f [exec ls -l --full-time --time-style=+%I:%M:%S\ %x $test \
++                | awk {{print $6, $7}}]
+     } else {
+     set f [exec ls -l --full-time $test | awk {{print $6, $7, $8, $9, $10}}]
+     }
+@@ -759,8 +759,8 @@
+     if {[string range $test 0 $fdlength] == $faxdir} {
+       foreach n $test {
+       if {$LSLFT == "coreutils"} {
+-      set f [exec ls -l --full-time --time-style=+%a\ %b\ %d\ %I:%M:%S\ %Y $n \
+-                  | awk {{print $6, $7, $8, $9, $10}}]
++      set f [exec ls -l --full-time --time-style=+%I:%M:%S\ %x $n \
++                  | awk {{print $6, $7}}]
+       } else {
+       set f [exec ls -l --full-time $n | awk {{print $6, $7, $8, $9, $10}}]
+       }
+@@ -798,7 +798,7 @@
+          > $userhome/tkvoice.tmp 2>/dev/null
+ 
+     if {$PCMDT == "wavplay"} {
+-    set playcmd "$tkvoicedir/bin/wavplay -M -d /dev/$audioDEV"
++    set playcmd "wavplay -M -d /dev/$audioDEV"
+     set playPID [eval exec $playcmd $userhome/tkvoice.tmp > /dev/null 2>&1 &]
+      } elseif {$PCMDT == "sox"} {
+     set playPID [eval exec sox -t wav $userhome/tkvoice.tmp -t $audioOST /dev/$audioDEV > /dev/null 2>&1 &]
