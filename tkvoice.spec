@@ -1,5 +1,5 @@
 Summary:	Frontend for vgetty and sendfax
-Summary(pl.UTF-8):   Frontend do programów vgetty i sendfax
+Summary(pl.UTF-8):	Frontend do programów vgetty i sendfax
 Name:		tkvoice
 Version:	1.4b
 Release:	1
